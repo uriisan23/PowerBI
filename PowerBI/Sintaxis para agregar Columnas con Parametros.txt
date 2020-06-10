@@ -1,0 +1,55 @@
+let
+1    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcjYwVIqNBQA=", BinaryEncoding.Base64),    2     Compression.Deflate)), let _t = ((type text) meta [Serialized.Text = true]) in type table [CabeceraId = _t]),
+3    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"CabeceraId", type text}}),
+4    #"Personalizada agregada" = Table.AddColumn(#"Tipo cambiado", "Fecha Inicio de OC", each #"Fecha Inicio"),
+5    #"Personalizada agregada1" = Table.AddColumn(#"Tipo cambiado", "Fecha Final de OC", each #"Fecha Final"),
+6
+7    #"Personalizada agregada2" = Table.AddColumn(#"Tipo cambiado", "Filtro de Venta", each  #"FiltroDV"),
+8    #"Personalizada agregada3" = Table.AddColumn(#"Tipo cambiado", "Factor de 0 a 20", each  #"Factor 0 a 20 DV"),
+9    #"Personalizada agregada4" = Table.AddColumn(#"Tipo cambiado", "Factor de 21 a 60", each  #"Factor 21 a 60 DV"),
+10    #"Personalizada agregada5" = Table.AddColumn(#"Tipo cambiado", "Factor de 61 a 90", each  #"Factor 61 a 90 DV")
+11   in
+12     #"Personalizada agregada5"
+_____________________________________________________
+
+AQUI SE ESTABA APLICANDO EL CAMBIO SOBRE  #"Tipo cambiado" QUE ESTA EN LA LINEA 3, por eso no te generaba una columna nueva
+    el #"Tipo cambiado" es un paso que queda gurdado como un objeto y al invocar el Table.AddColumn(#"Tipo cambiado" el cambio se
+     aplico sobre ese objeto en particular.
+
+    El codigo del paso a paso generado por el sistema invoca la funcion Table.AddColumn( pero le agrega el nuevo paso(objeto) creado 
+    #"Personalizada agregada1", despues el #"Personalizada agregada2" sucesivamente apra indicar a que objeto se le debe de generar el     cambio.
+
+
+
+let
+    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("i45WcjYwVIqNBQA=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type text) meta [Serialized.Text = true]) in type table [CabeceraId = _t]),
+    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"CabeceraId", type text}}),
+    #"Personalizada agregada" = Table.AddColumn(#"Tipo cambiado", "Fecha Inicio de OC", each #"Fecha Inicio"),
+    #"Personalizada agregada1" = Table.AddColumn(#"Personalizada agregada", "Fecha Final de OC", each #"Fecha Final"),
+    #"Personalizada agregada2" = Table.AddColumn(#"Personalizada agregada1", "Filtro Dias de Venta", each #"Filtro Dias de Venta"),
+    #"Personalizada agregada3" = Table.AddColumn(#"Personalizada agregada2", "Factor de 0 a 20", each #"Factor 0 a 20 DV"),
+    #"Personalizada agregada4" = Table.AddColumn(#"Personalizada agregada3", "Factor de 21 a 60", each #"Factor 21 a 60 DV"),
+    #"Personalizada agregada5" = Table.AddColumn(#"Personalizada agregada4", "Factor de 61 a 90", each #"Factor 61 a 90 DV")
+in
+    #"Personalizada agregada5"
+
+_________________________________________
+AGREGAR COLUMNA PERSONALIZADA INVOCANDO FUNCION PERSONALIZADA
+
+let
+    Origen = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("vZZRbqMwEECvYuW7qMZASD4HMF5LgNEYSNOqd9uz7Ml2zNCGdJWq0pL8QbDfmxmGcd7edrF8lupZyfi4e9q91IBtdALUdFO6rrZmRCit60SlRXXuoLWlF60rbKNFWPfLjV6LHhDEqfUC2sLqbtB+Xq8ncRZ0MxAtT3bvT6SLV7qTLjxOUdmEPXRvu4kWW8PGEjWg4IcBJmi58BonW2qhu0s4yT6jzYligbqXIDuwIFkJhr4FHCI/oAkVg6YcGxdQJfQkqaCiUpyF64OQqwKvI2rhB4dg9Kow6Rrr+jbq6xcpA5XC5FcQuBoHW9sSKidoAVc+LKcwQoxHhmUrmNc+Mljw1cerHCvwwmgsNO33rsArtA/sEFvGuP0aB41H3UfGmSZAW1fNu5YMQdBDh6EF/vwOAbu2RwhFqKEcxnBpnO2MMI0roCGAZEd+T0ees+RwT0myZHL8RkL9AIiuoS75b59S6SxU8hshdPSD9dwot5TiyjfR9wD+kpCKH5RQ/JGQepAwidmX3M93kaVLNdNHyGK1Z1v2CJuSS25fBgVNnplz7ZqJn3y65objFl1mUkgh54Gr8i2hRz4m1GFDqEq52JI+lGS79Hn4UpjbQROegwTcjqlSPsFkuiV0GQUy2xC6fIFyf5Np28Dg4/Ys/vkH9IO3FnN/yfymA/Vk/Y+BCRX3/S8=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type text) meta [Serialized.Text = true]) in type table [Fecha = _t, ID = _t, Descripcion = _t, Minutos = _t]),
+    #"Tipo cambiado" = Table.TransformColumnTypes(Origen,{{"Fecha", type date}, {"ID", type text}, {"Descripcion", type text}, {"Minutos", Int64.Type}}),
+    #"Función personalizada invocada" = Table.AddColumn(#"Tipo cambiado", "Semana", each Consulta1([Fecha])),
+    #"Columnas quitadas" = Table.RemoveColumns(#"Función personalizada invocada",{"Semana"}),
+    #"Función personalizada invocada1" = Table.AddColumn(#"Columnas quitadas", "Semana", each Consulta1([Fecha])),
+    #"Columnas quitadas1" = Table.RemoveColumns(#"Función personalizada invocada1",{"Semana"})
+in
+    #"Columnas quitadas1"
+
+
+
+fUNCION:
+
+(Fecha)=>
+
+   Date.WeekOfYear(Fecha, Day.Monday)

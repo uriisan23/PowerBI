@@ -1,0 +1,43 @@
+(FechaInicio,FechaFinal)=>
+let
+    Origen = OData.Feed("https://topmarttestaos.sandbox.retail.dynamics.com/data", null, [Implementation="2.0"]),
+    CDSSalesOrderLines_table = Origen{[Name="CDSSalesOrderLines",Signature="table"]}[Data],
+    #"Filas filtradas" = Table.SelectRows(CDSSalesOrderLines_table, each [RequestedShippingDate] >= #datetimezone(Date.Year(FechaInicio), Date.Month(FechaInicio),Date.Day(FechaInicio), 0, 0, 0, -6, 0) and [RequestedShippingDate] <= #datetimezone(Date.Year(FechaFinal), Date.Month(FechaFinal),Date.Day(FechaFinal),12, 0, 0, 0, 0))
+in
+    #"Filas filtradas"
+
+
+
+= Table.SelectRows(CDSSalesOrderLines_table, each [RequestedShippingDate] >= #datetimezone(Date.Year(#"Fecha Inicio"), Date.Month(#"Fecha Inicio"),Date.Day(#"Fecha Inicio"), 0, 0, 0, -6, 0) and [RequestedShippingDate] <= #datetimezone(Date.Year(#"Fecha Final"), Date.Month(#"Fecha Final"),Date.Day(#"Fecha Final"),12, 0, 0, 0, 0))
+
+
+#"Filas filtradas" = Table.SelectRows(CDSSalesOrderLines_table, each [RequestedShippingDate] >= #datetimezone(Date.Year(FechaInicio), Date.Month(FechaInicio),Date.Day(FechaInicio), 0, 0, 0, -6, 0) and [RequestedShippingDate] <= #datetimezone(Date.Year(FechaFinal), Date.Month(FechaFinal),Date.Day(FechaFinal),12, 0, 0, 0, 0))
+in
+    #"Filas filtradas"
+
+
+   #"Filas filtradas" = Table.SelectRows(InventorySitesOnHand, each [Dias de Venta] >= #datetimezone(Date.Year(#"Fecha Inicio"), Date.Month(#"Fecha Inicio"),Date.Day(#"Fecha Inicio"), 0, 0, 0, -6, 0) and [InvoiceDate]<= #datetimezone(Date.Year(#"Fecha Final"), Date.Month(#"Fecha Final"),Date.Day(#"Fecha Final"),12, 0, 0, 0, 0))
+in
+    #"Filas filtradas"
+SalesInvoiceLines 
+   #"Filas filtradas" = Table.SelectRows(SalesInvoiceLines_table, each Date.DayOfWeek([InvoiceDate],Day.Monday) >= Date.DayOfWeek(#"Fecha para Ordenes de Venta",Day.Monday),
+
+in
+    #"Filas filtradas"
+
+
+Filtro en Url
+let
+   LessThanText = Date.ToText(#"Fecha Final para OC", "yyyy-MM-dd"),
+   GreaterThanText = Date.ToText(#"Fecha Inicial para OC","yyyy-MM-dd"),
+   UrlText =  Text.Combine({"https://topmartprodenv.retail.dynamics.com/data/SalesInvoiceLines?$filter=InvoiceDate%20le%20",LessThanText,"&","gt",GreaterThanText}," "),
+
+
+    Source = OData.Feed(UrlText),
+    #"Columnas quitadas" = Table.RemoveColumns(Source,{"dataAreaId"}),
+    #"Columnas con nombre cambiado" = Table.RenameColumns(#"Columnas quitadas",{{"InvoicedQuantity", "Piezas Vendidas"}})
+
+
+in 
+
+ #"Columnas con nombre cambiado"

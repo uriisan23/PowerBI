@@ -1,0 +1,172 @@
+
+Codigo para extraer fecha de 15 dias atras para filtro por semana contempla febrero y año biciesto
+______________________________________________________________________________________________________________________________________________________________
+varday
+
+is9 = 14  less10= 15  great10 = 15
+
+if less10 + great10 = 30
+
+if day = 14 or day = 15 then 
+   varday = day +13
+             if month = 1 then
+              varmonth =  month +11 
+              varyear = year - 1 
+             else
+                varmonth =  month -1  
+                varyear = year
+  else
+    if day <=13 then
+       varday = day + less 
+            if month = 1 then
+              varmonth =  month +11 
+              varyear = year 
+             else
+                varmonth =  month -1 
+                varyear = year   
+     else
+          varday =   day - great10
+          varmonth =  month 
+          varyear = year
+
+
+#date(varyear,varmonth,varday)
+________________________________________________________________________________________________________________________________
+
+
+
+
+______________
+
+varday
+
+is9 = 19  less10= 20  great10 = 10
+
+if less10 + great10 = 30
+
+if day = 9 then 
+   varday = day +19
+  else
+    if day <=10 then
+         varday = day + less 
+       else
+          varday =   day - great10
+
+_________________________________________
+
+varmonth
+
+less3= 11  great3 = 1
+
+if less3 + great3 = 12
+
+
+    if month <= 2 then
+         varmonth= month + less 
+         varyear = year - 1  
+       else
+          varmonth=   day - great10
+          varyear = year
+
+#date(varyear,varmonth,varday)
+
+______________________________
+-
+-   ***
+-   ***   SINTAXIS POWER BI
+-_____________________________
+
+let
+  day = Date.Day(#"fecha"),
+  month = Date.Month(#"fecha"),
+  year = Date.Year(#"fecha"),
+
+Fechadia = 
+   if day = 14 or day = 15 then 
+      day +13
+    else
+      if day <= 13 then 
+        day + 15
+      else
+           day - 15,
+Fechames =  
+      if day <= 15 then
+       if month = 1 then 
+          month + 11
+        else 
+           month -1 
+      else
+           month,
+Fechayear =
+        if month = 1 and day <= 15 then
+          year -1
+        else
+          year,
+FechaInicial= #date(Fechayear,Fechames,Fechadia)
+
+
+in 
+
+  FechaInicial
+
+_____________________
+
+let
+Source =if Date.Day(#"Fecha para Ordenes de Venta")= 31  then 
+     if Date.Month(#"Fecha para Ordenes de Venta") - 1 = 2 then      
+       #date(Date.Year(#"Fecha para Ordenes de Venta"),Date.Month(#"Fecha para Ordenes de Venta")-1,Date.Day(#"Fecha para Ordenes de Venta")-3) 
+     else
+
+       if Date.Month(#"Fecha para Ordenes de Venta") > 1 then 
+          #date(Date.Year(#"Fecha para Ordenes de Venta"),Date.Month(#"Fecha para Ordenes de Venta")-1,Date.Day(#"Fecha para Ordenes de Venta")-1) 
+      else 
+        #date(Date.Year(#"Fecha para Ordenes de Venta")-1,Date.Month(#"Fecha para Ordenes de Venta")+11,Date.Day(#"Fecha para Ordenes de Venta")-1)  
+else 
+
+       if Date.Month(#"Fecha para Ordenes de Venta")  > 1 then 
+         #date(Date.Year(#"Fecha para Ordenes de Venta"),Date.Month(#"Fecha para Ordenes de Venta"),Date.Day(#"Fecha para Ordenes de Venta")-7) 
+       else 
+         #date(Date.Year(#"Fecha para Ordenes de Venta")-1,Date.Month(#"Fecha para Ordenes de Venta")+11,Date.Day(#"Fecha para Ordenes de Venta"))
+in 
+
+Source
+
+__________________________
+
+
+let
+  day = Date.Day(#"Fecha para Ordenes de Venta"),
+  month = Date.Month(#"Fecha para Ordenes de Venta"),
+  year = Date.Year(#"Fecha para Ordenes de Venta"),
+
+Fechadia = 
+   if day = 14 or day = 15 then 
+      day +13
+    else
+      if day <= 13 then 
+        day + 15
+      else
+           day - 15,
+Fechames =  
+      if day <= 15 then
+       if month = 1 then 
+          month + 11
+        else 
+           month -1 
+      else
+           month,
+Fechayear =
+        if month = 1 and day <= 15 then
+          year -1
+        else
+          year,
+FechaInicial= #date(Fechayear,Fechames,Fechadia)
+
+
+in 
+
+  FechaInicial
+
+
+
+

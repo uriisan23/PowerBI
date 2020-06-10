@@ -1,0 +1,100 @@
+FechaInicio
+FechaFinal
+
+let
+   LessThanText = Date.ToText(FechaFinal, "yyyy-MM-dd"),
+   GreaterThanText = Date.Totext(FechaInicio,"yyyy-MM-dd"),
+   UrlText =
+  Text.Combine({"https://topmarttestaos.sandbox.retail.dynamics.com/data/CDSSalesOrderLines?$filter=InvoiceDate%20le%20",LessThanText,"&","gt",GreaterThanText}," "),
+
+
+  Source = OData.Feed(UrlText)
+
+in Source
+
+-------
+let
+   LessThanText = Date.ToText(FechaFinal, "yyyy-MM-dd"),
+   GreaterThanText = Date.ToText(FechaInicio,"yyyy-MM-dd"),
+   UrlText =  Text.Combine({"https://topmarttestaos.sandbox.retail.dynamics.com/data/SalesInvoiceLines?$filter=InvoiceDate%20le%20",LessThanText,"&","gt",GreaterThanText}," "),
+
+
+  Source = OData.Feed(UrlText)
+
+in Source
+
+
+ UrlText = "https://topmarttestaos.sandbox.retail.dynamics.com/data/SalesInvoiceLines?$top=1000",
+
+ PurchaseOrderConfirmationHeaders_table = Origen{[Name="PurchaseOrderConfirmationHeaders",Signature="table"]}[Data],
+
+Origen{[Name="SalesInvoiceHeaders",Signature="table"]}[Data], ***este es el dato que hay que agregar en todas las consultas ***
+
+
+________________________________________________Original
+let
+    Origen = OData.Feed("https://topmarttestaos.sandbox.retail.dynamics.com/data", null, [Implementation="2.0"]),
+    CDSSalesOrderLines_table = Origen{[Name="CDSSalesOrderLines",Signature="table"]}[Data]
+in
+    CDSSalesOrderLines_table
+___________________________________________________________________________________-
+
+
+__________________________-codigo sin erroes
+let
+    LessThanText = Date.ToText(FechaFinal, "yyyy-MM-dd"),
+    GreaterThanText = Date.ToText(FechaInicio,"yyyy-MM-dd"),
+    UrlText = 
+     TextCombine({"https://topmarttestaos.sandbox.retail.dynamics.com/data/CDSSalesOrderLines?$filter=RequestedShippingDate%20le      %20",LessThanText,"&","gt",GreaterThanText}," "),
+
+    Origen = OData.Feed(UrlText, null, [Implementation="2.0"]),
+    CDSSalesOrderLines_table = Origen{[Name="CDSSalesOrderLines",Signature="table"]}[Data]
+in
+    CDSSalesOrderLines_table
+______________________________________________
+
+
+
+
+
+
+
+
+
+let
+   LessThanText = Date.ToText(#"Fecha Final para OC", "yyyy-MM-dd"),
+   GreaterThanText = Date.ToText(#"Fecha Inicial para OC","yyyy-MM-dd"),
+   UrlText =  Text.Combine({"https://topmartprodenv.retail.dynamics.com/data/PurchaseOrderConfirmationLines?$filter=ConfirmationDate%20le%20",LessThanText,"&","gt",GreaterThanText}," "),
+
+
+    Source = OData.Feed(UrlText),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
